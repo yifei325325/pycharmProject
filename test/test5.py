@@ -9,3 +9,4 @@ print tn.read_all()
 tn.read_until("GM login:")
 tn.write("root\n")
 print tn.read_all()
+print "test git"
