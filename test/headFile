@@ -1,0 +1,13 @@
+#固件定义的广播结构体
+typedef struct{
+        char bc_name[NETWORK_LEN];	/* broadcast packet name */
+        int  command;
+        char camid[NETWORK_LEN];
+        char ip[NETWORK_LEN];
+        int  port;
+        char mac[NETWORK_LEN];
+        char version[NETWORK_LEN];
+        int  state; /* 1:registered, 0:unregistered */
+        char reserve[16]; /* reserve for future */
+        int  checksum;
+}BROADCAST_PACKET;
