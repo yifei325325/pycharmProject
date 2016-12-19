@@ -2,10 +2,6 @@
 import struct
 import socket
 import time
-import logging
-import binascii
-
-logging.basicConfig(level=logging.INFO)
 
 BC_PORT = 3759
 
@@ -98,34 +94,6 @@ class searchCamera(object):
         except:
             return 0
 
-# s = searchCamera()
-# lis = s.getIp(s.broadcastString)
-# print lis
-# for j in xrange(len(lis)):
-#     bc_name = lis[j][0]
-#     command = lis[j][1]
-#     camid = lis[j][2]
-#     ip = lis[j][3]
-#     port = lis[j][4]
-#     mac = lis[j][5]
-#     version = lis[j][6]
-#     state = lis[j][7]
-#     p2pType = lis[j][8]
-#     camType = lis[j][9]
-#     reserve = lis[j][10]
-#     checksum = lis[j][11]
-#     # print "bc_name = ",bc_name
-#     # print "command = ",command
-#     print "camid = ",camid
-#     print "ip = ",ip
-#     # print "port = ",port
-#     print "mac = ",mac
-#     print "version = ",version
-#     print "state = ",state
-#     print "p2pType = ",p2pType
-#     print "camType = ",D[int(binascii.b2a_hex(camType),base=16)]
-#     print "reserve = ",reserve
-#     print "checksum = ",checksum
-#
-#
-#             # print "camType = ", D[int(binascii.b2a_hex(lis[j][i]),base=16)]
+
+sc = searchCamera()
+print sc.getIp(sc.broadcastString)

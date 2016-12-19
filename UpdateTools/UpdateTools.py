@@ -11,6 +11,7 @@ import thread
 import time
 import telnetlib
 import socket
+import binascii
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
