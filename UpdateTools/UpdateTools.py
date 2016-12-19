@@ -29,9 +29,13 @@ class myWidget(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.initUi()
+        self.state = 0
 
         self.connect(self.ui.pushButton,SIGNAL("clicked()"),self.search)
         self.ui.listWidget.itemDoubleClicked.connect(self.update)
+
+        self.connect(self.ui.checkBox,SIGNAL("clicked()"),self.select_all)
+
 
     def initUi(self):
         self.ui.pushButton_2.setEnabled(False)
@@ -39,8 +43,11 @@ class myWidget(QWidget):
     def search(self):
         self.ui.listWidget.clear()
         sc = searchCamera()
+
         lis = sc.getIp(sc.broadcastString)
-        # print lis
+        if lis == 0:
+            self.ui.listWidget_2.addItem(self.tr("没有搜索到摄像头，请重试！\n"))
+            return 0
         flag = 0
         for j in xrange(len(lis)):
             camid = lis[j][2]
@@ -79,43 +86,36 @@ class myWidget(QWidget):
                     break
             if not flag:
                 self.ui.listWidget.addItem(result)
-        # self.ui.listWidget.connect(self.ui.listWidget,SIGNAL('doubleClicked()'),self.update)
     def update(self):
         currentItem =  self.ui.listWidget.currentItem().text()
         ip = currentItem.section("\n",1,1)
         ip = ip.section(':',1,1,QString.SectionSkipEmpty).remove('\t')
 
+        username = "root"
+        password = "iBabyVP8019"
+        finish = "#"
 
-        username = 'root'
-        password = 'iBabyVP8019'
-        finish = '#'
-        #         filename = self.GetFileName(camType)
-        # print "my file name = ", fileName
-        # print type(fileName)
-        #
+        print "start"
         try:
-            tn = telnetlib.Telnet(str(ip), port=23, timeout=10)
-        except BaseException,e:
-            print e
+            tn = telnetlib.Telnet(str(ip), port=23, )
+        except BaseException, error:
+            print 'error: \t%s' % error
             return 0
-        #
-        # if camType == 0:
-        #     tn.read_until('iBaby login: ')
-        # elif camType == 1 or camType == 2 or camType == 3:
         tn.read_until('GM login: ')
-
         tn.write(username + '\n')
         tn.read_until('Password: ')
         tn.write(password + '\n')
         tn.read_until(finish)
-        tn.write('tftp -g -l /tmp/test.file -r test.file %s'%host_ip)
+        tn.write('cd /mnt/mtd/update/file;tftp -gr ipcam_flash -l ipcam %s;chmod 777 ipcam;reboot\n' % host_ip)
+        tn.close()
 
-        # tn.read_until("$")
-        # tn.close()
+    def select_all(self):
+        print 'select all'
+        self.ui.pushButton_2.setEnabled(True)
+        print self.ui.listWidget.count()
+        # self.ui.listWidget.setItemSelected(self.ui.listWidget.item(0),True)
 
-
-
-
+        # print self.ui.listWidget.selectedItems()
 
 app = QApplication(sys.argv)
 mw = myWidget()
