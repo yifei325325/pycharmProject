@@ -3,10 +3,12 @@
 import sys
 import telnetlib
 import socket
+import os
 
 local_ip = socket.gethostbyname(socket.gethostname())
+os.startfile(os.getcwd()+'/tftpd32/tftpd32.exe')
 
-def update(ip,local_ip):
+def update(ip):
     username = "root"
     password = "iBabyVP8019"
     finish = "#"
@@ -20,13 +22,16 @@ def update(ip,local_ip):
     tn.read_until('Password: ')
     tn.write(password + '\n')
     tn.read_until(finish)
-    # tn.write("echo \"test\"\n")
-    tn.write('cd /mnt/mtd/update/file;tftp -gr ipcam_flash -l ipcam %s;chmod 777 ipcam;reboot\n'%local_ip)
-    print tn.read_until(finish)
+    print "updateing ...... please wait......"
+    tn.write('cd /mnt/mtd/update/file;tftp -gr %s -l ipcam %s;chmod 777 ipcam;echo 1 > /mnt/mtd1/workstate;reboot\n'%(sys.argv[2],local_ip))
+    tn.read_until(finish)
     tn.close()
 
-update(sys.argv[1],local_ip)
-print 'the device ip = %s has been updated'%sys.argv[1]
+if update(sys.argv[1]) == 0:
+    print "check you device connection!!!" 
+else:
+    print "the device is rebooting......"
+    print 'the device ip = %s has been updated'%sys.argv[1]
 
 
 
